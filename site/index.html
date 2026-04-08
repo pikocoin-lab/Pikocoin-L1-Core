@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PIKO | Sovereign Chain</title>
+    <title>PIKO | Wallet Console</title>
     <meta
       name="description"
-      content="Pikocoin 主网前端门户与控制台，面向隐私、抗量子、可验证 AI 与高速支付。"
+      content="Pikocoin browser wallet console for native wallet generation, founder-claim signing, transfers, and block confirmation."
     />
-    <meta property="og:title" content="PIKO | Sovereign Chain" />
+    <meta property="og:title" content="PIKO | Wallet Console" />
     <meta
       property="og:description"
-      content="查看 Pikocoin 的代币分配、链元数据、验证者共识状态与创世认领流程。"
+      content="Connect a node, generate a Lamport wallet in-browser, claim founder allocation with MetaMask, and submit transactions."
     />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="./assets/pikocoin-icon.png" />
@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -34,13 +34,13 @@
           <img class="brand-icon" src="./assets/pikocoin-icon.png" alt="Pikocoin" />
           <div>
             <p class="eyebrow">Pikocoin Sovereign Network</p>
-            <h1>PIKO 主网前端门户</h1>
+            <h1>PIKO wallet and founder-claim console</h1>
           </div>
         </div>
         <nav class="topnav">
-          <a href="#network">网络状态</a>
-          <a href="#tokenomics">代币分配</a>
-          <a href="#claim">认领流程</a>
+          <a href="#wallet-console">Wallet</a>
+          <a href="#network">Network</a>
+          <a href="#tokenomics">Tokenomics</a>
           <a href="https://github.com/pikocoin-lab/Pikocoin-L1-Core" target="_blank" rel="noreferrer">GitHub</a>
         </nav>
       </header>
@@ -48,15 +48,16 @@
       <main>
         <section class="hero">
           <div class="hero-copy">
-            <p class="eyebrow">Privacy · AI · Post-Quantum · Fast Settlement</p>
-            <h2>把你的链原型，先变成真正能上线展示、能连节点、能讲清楚代币经济的入口页。</h2>
+            <p class="eyebrow">Browser-generated wallet | MetaMask claim | Direct node submit</p>
+            <h2>Turn the landing page into a real control surface for claim, transfer, and block confirmation.</h2>
             <p class="hero-text">
-              这个前端直接围绕你现在的 Pikocoin 原型链来做，展示创世分配、验证者 finality、外部
-              EVM 地址认领，以及未来面向隐私执行层与 AI 协处理网络的升级路线。
+              This console now focuses on operations, not only presentation. Generate a native Lamport wallet in the browser,
+              connect the founder EVM wallet through MetaMask, sign the claim message, submit transfers directly to the node,
+              and confirm the next block from the same UI.
             </p>
             <div class="hero-actions">
-              <a class="button button-primary" href="#network">连接节点</a>
-              <a class="button button-secondary" href="#tokenomics">查看分配</a>
+              <a class="button button-primary" href="#wallet-console">Open Console</a>
+              <a class="button button-secondary" href="#network">Inspect Network</a>
             </div>
             <div class="hero-metrics" id="hero-metrics"></div>
           </div>
@@ -66,85 +67,207 @@
               <img src="./assets/pikocoin-icon.png" alt="PIKO Coin" />
             </div>
             <div class="panel-card">
-              <p class="panel-label">主网定位</p>
-              <p class="panel-value">模块化主权链 + 隐私结算 + 可验证 AI + 抗量子迁移</p>
+              <p class="panel-label">Founder reserve address</p>
+              <p class="panel-value mono" id="founder-address">0x30514237625b9e4206c728ff551725b4bf9d4a85</p>
             </div>
             <div class="panel-card panel-card-compact">
-              <span>创世保留地址</span>
-              <button class="inline-link" id="copy-founder" type="button">复制</button>
+              <span>Quick action</span>
+              <button class="inline-link" id="copy-founder" type="button">Copy founder address</button>
             </div>
-            <code class="address-pill" id="founder-address">0x30514237625b9e4206c728ff551725b4bf9d4a85</code>
+            <p class="hero-note">
+              Production note: the deployed HTTPS site can only call an <code>https://</code> node endpoint. If your node runs on
+              <code>http://127.0.0.1:8080</code>, open the site locally during development or expose the node over HTTPS.
+            </p>
           </div>
         </section>
 
         <section class="feature-grid">
           <article class="feature-card">
             <p class="eyebrow">01</p>
-            <h3>去中心化安全层</h3>
-            <p>验证者轮换、链上投票、finalized 高度追踪已经接入，适合作为 testnet 起点。</p>
+            <h3>Native wallet in browser</h3>
+            <p>Generate Lamport keys locally with Web Crypto, persist them in local storage, and export the JSON wallet file on demand.</p>
           </article>
           <article class="feature-card">
             <p class="eyebrow">02</p>
-            <h3>外部地址认领</h3>
-            <p>创世里的 `0x...` 额度可通过 EVM personal-sign 认领到原生 `piko1...` 钱包。</p>
+            <h3>Founder claim via MetaMask</h3>
+            <p>Request the exact claim message from your node, sign it with the founder EVM wallet, then submit it back as an on-chain claim.</p>
           </article>
           <article class="feature-card">
             <p class="eyebrow">03</p>
-            <h3>抗量子迁移预留</h3>
-            <p>当前原型用 Lamport 风格签名验证路径，后续可平滑替换到正式 PQ 签名实现。</p>
+            <h3>Direct transaction submit</h3>
+            <p>Sign native transfers client-side and post the full transaction to <code>/tx/submit</code> without sending private keys to the node.</p>
           </article>
+        </section>
+
+        <section class="section" id="wallet-console">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Interactive Console</p>
+              <h2>Wallet, claim, transfer, and block controls</h2>
+            </div>
+            <p class="section-text">
+              The current prototype still uses one-time Lamport addresses. Treat every sender wallet as disposable and avoid partial sends
+              from important balances until we move to a production-grade signature and account model.
+            </p>
+          </div>
+
+          <div class="console-card">
+            <label class="input-label" for="api-base">Node API endpoint</label>
+            <div class="endpoint-row">
+              <input id="api-base" type="url" placeholder="https://api.piko.eu.cc or http://127.0.0.1:8080 for local dev" />
+              <button class="button button-primary" id="connect-api" type="button">Connect Node</button>
+              <button class="button button-secondary" id="load-snapshot" type="button">Load Snapshot</button>
+            </div>
+            <p class="console-hint" id="api-message">
+              Start by loading the static genesis snapshot or connect a live node API. Wallet, claim, and transfer actions require a live node.
+            </p>
+
+            <div class="control-grid">
+              <article class="control-card">
+                <div class="raw-panel-head">
+                  <h3>Native PIKO Wallet</h3>
+                  <span id="wallet-state-pill">offline</span>
+                </div>
+                <p class="helper-copy">
+                  Keys are generated in-browser and never sent to the node. Download the wallet JSON if you want an external backup.
+                </p>
+                <div class="control-actions">
+                  <button class="button button-primary" id="generate-wallet" type="button">Generate Local Wallet</button>
+                  <label class="button button-secondary file-button">
+                    Import Wallet JSON
+                    <input id="import-wallet-file" type="file" accept="application/json,.json" />
+                  </label>
+                </div>
+                <div class="control-actions">
+                  <button class="button button-secondary" id="download-wallet" type="button">Download Wallet</button>
+                  <button class="button button-ghost" id="refresh-wallet" type="button">Refresh Balance</button>
+                  <button class="button button-danger" id="clear-wallet" type="button">Clear Local Wallet</button>
+                </div>
+                <dl class="detail-grid" id="wallet-details"></dl>
+                <p class="warning-copy" id="wallet-warning">
+                  Lamport sender addresses are single-use in this prototype. After you spend from one wallet, rotate to a fresh wallet for the next send.
+                </p>
+              </article>
+
+              <article class="control-card">
+                <div class="raw-panel-head">
+                  <h3>Founder Claim Bridge</h3>
+                  <span id="evm-state-pill">metamask</span>
+                </div>
+                <p class="helper-copy">
+                  Only the founder wallet <code>0x3051...4a85</code> can sign the checked-in genesis claim. Connect MetaMask before submitting.
+                </p>
+                <div class="control-actions">
+                  <button class="button button-primary" id="connect-evm" type="button">Connect MetaMask</button>
+                  <button class="button button-secondary" id="prepare-claim" type="button">Prepare Claim Message</button>
+                  <button class="button button-secondary" id="submit-claim" type="button">Sign and Submit Claim</button>
+                </div>
+                <dl class="detail-grid" id="evm-details"></dl>
+                <label class="field">
+                  <span>Claim message preview</span>
+                  <textarea id="claim-message-box" rows="7" readonly placeholder="The node-generated claim message will appear here."></textarea>
+                </label>
+              </article>
+
+              <article class="control-card">
+                <div class="raw-panel-head">
+                  <h3>Transfer PIKO</h3>
+                  <span id="transfer-state-pill">native tx</span>
+                </div>
+                <p class="helper-copy">
+                  Transfers are signed client-side and submitted to <code>/tx/submit</code>. This is safer than passing the private key to the node.
+                </p>
+                <div class="form-grid">
+                  <label class="field field-span">
+                    <span>Recipient address</span>
+                    <input id="send-recipient" type="text" placeholder="piko1... recipient or another address" />
+                  </label>
+                  <label class="field">
+                    <span>Amount</span>
+                    <input id="send-amount" type="number" min="1" step="1" placeholder="1000" />
+                  </label>
+                  <label class="field">
+                    <span>Note</span>
+                    <input id="send-note" type="text" maxlength="120" placeholder="Optional memo" />
+                  </label>
+                </div>
+                <div class="control-actions">
+                  <button class="button button-primary" id="send-transaction" type="button">Sign and Submit Transfer</button>
+                </div>
+                <p class="warning-copy">
+                  Prototype warning: because Lamport wallets are treated as one-time senders here, avoid partial sends from long-term holdings.
+                </p>
+              </article>
+
+              <article class="control-card">
+                <div class="raw-panel-head">
+                  <h3>Block Confirmation</h3>
+                  <span id="block-state-pill">operator</span>
+                </div>
+                <p class="helper-copy">
+                  Use your active native wallet as the miner or proposer to include pending claim and transfer transactions in the next block.
+                </p>
+                <div class="control-actions">
+                  <button class="button button-primary" id="confirm-next-block" type="button">Mine or Propose Next Block</button>
+                  <button class="button button-secondary" id="refresh-node" type="button">Refresh Node State</button>
+                </div>
+                <dl class="detail-grid" id="operator-details"></dl>
+                <p class="helper-copy" id="block-action-note">
+                  In validator mode the node will only accept the selected proposer for the current height.
+                </p>
+              </article>
+            </div>
+
+            <article class="activity-card">
+              <div class="raw-panel-head">
+                <h3>Activity Log</h3>
+                <span id="activity-count">0 events</span>
+              </div>
+              <div class="activity-log" id="activity-log"></div>
+            </article>
+          </div>
         </section>
 
         <section class="section" id="network">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Live Console</p>
-              <h2>网络状态与节点控制台</h2>
+              <p class="eyebrow">Network View</p>
+              <h2>Chain state and consensus snapshot</h2>
             </div>
             <p class="section-text">
-              默认会读取静态创世快照。填入节点 API 后，可直接拉取 `/metadata`、`/status`、`/consensus/status`
-              和创始地址认领状态。
+              This section combines the static genesis snapshot with live node metadata when available. It is meant to help the operator see
+              current height, pending transactions, validator thresholds, and founder-claim status at a glance.
             </p>
           </div>
 
-          <div class="console-card">
-            <label class="input-label" for="api-base">节点 API 地址</label>
-            <div class="endpoint-row">
-              <input id="api-base" type="url" placeholder="例如 http://127.0.0.1:8080" />
-              <button class="button button-primary" id="connect-api" type="button">连接 API</button>
-              <button class="button button-secondary" id="load-snapshot" type="button">仅看静态快照</button>
-            </div>
-            <p class="console-hint" id="api-message">
-              当前展示的是仓库内静态数据。连接成功后，这里会切换成实时链状态。
-            </p>
-            <div class="stats-grid" id="network-stats"></div>
-            <div class="raw-grid">
-              <article class="raw-panel">
-                <div class="raw-panel-head">
-                  <h3>链元数据</h3>
-                  <span id="metadata-state">snapshot</span>
-                </div>
-                <pre id="metadata-json">{}</pre>
-              </article>
-              <article class="raw-panel">
-                <div class="raw-panel-head">
-                  <h3>共识状态</h3>
-                  <span id="consensus-state">snapshot</span>
-                </div>
-                <pre id="consensus-json">{}</pre>
-              </article>
-            </div>
+          <div class="stats-grid" id="network-stats"></div>
+          <div class="raw-grid">
+            <article class="raw-panel">
+              <div class="raw-panel-head">
+                <h3>Chain Metadata</h3>
+                <span id="metadata-state">snapshot</span>
+              </div>
+              <pre id="metadata-json">{}</pre>
+            </article>
+            <article class="raw-panel">
+              <div class="raw-panel-head">
+                <h3>Consensus and Status</h3>
+                <span id="consensus-state">snapshot</span>
+              </div>
+              <pre id="consensus-json">{}</pre>
+            </article>
           </div>
         </section>
 
         <section class="section" id="tokenomics">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Tokenomics</p>
-              <h2>创世代币分配</h2>
+              <p class="eyebrow">Genesis Tokenomics</p>
+              <h2>Genesis allocation and founder reserve tracking</h2>
             </div>
             <p class="section-text">
-              当前创世总量为 <span id="supply-inline">1,000,000,000</span> PIKO。你的地址已经预留创始人与治理国库额度。
+              The current checked-in plan distributes <span id="supply-inline">1,000,000,000</span> PIKO across founder treasury, ecosystem, community,
+              validator rewards, liquidity, AI and privacy research, and operations.
             </p>
           </div>
 
@@ -157,59 +280,34 @@
         <section class="section" id="claim">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Founder Claim</p>
-              <h2>创始地址认领路径</h2>
+              <p class="eyebrow">Founder Claim Status</p>
+              <h2>Genesis bridge state for the founder address</h2>
             </div>
             <p class="section-text">
-              这部分直接对应你已经写进链里的 `EVM_PERSONAL_CLAIM` 流程，用于把创世里的 `0x...` 额度转入 `piko1...` 地址。
+              This panel tracks whether the founder allocation is still available, already pending in the mempool, or fully claimed into a native
+              <code>piko1</code> address.
             </p>
           </div>
 
           <div class="claim-layout">
             <ol class="step-list">
-              <li>创建或导入一个原生 `piko1...` 钱包作为接收地址。</li>
-              <li>向节点请求 claim message，让钱包拿到需签名的精确文本。</li>
-              <li>用 `0x3051...` 对应 EVM 钱包做 personal-sign。</li>
-              <li>把签名提交到链上，等待 proposer 出下一个块后完成认领。</li>
+              <li>Create or import a native wallet in the browser.</li>
+              <li>Connect the founder EVM wallet in MetaMask.</li>
+              <li>Request the claim message from a live node endpoint.</li>
+              <li>Sign, submit, and confirm the next block to finalize the claim.</li>
             </ol>
             <div class="claim-card">
               <div class="claim-header">
-                <h3>Founder Claim Status</h3>
+                <h3>Claim Snapshot</h3>
                 <span id="claim-status-tag">snapshot</span>
               </div>
               <dl class="claim-grid" id="claim-grid"></dl>
             </div>
           </div>
         </section>
-
-        <section class="section roadmap">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Roadmap</p>
-              <h2>下一阶段直接对接主网能力</h2>
-            </div>
-          </div>
-          <div class="roadmap-grid">
-            <article class="roadmap-card">
-              <span>Phase 1</span>
-              <h3>前端 + GitHub + Cloudflare Pages</h3>
-              <p>把品牌门户、链状态展示、控制台入口挂到 `piko.eu.cc`。</p>
-            </article>
-            <article class="roadmap-card">
-              <span>Phase 2</span>
-              <h3>节点签名投票</h3>
-              <p>把当前占位式 validator 身份模式替换成真正可验证的 vote key。</p>
-            </article>
-            <article class="roadmap-card">
-              <span>Phase 3</span>
-              <h3>隐私层与支付层</h3>
-              <p>引入 UTXO + zk 证明支付通道，把“隐私”和“速度”从架构上同时补齐。</p>
-            </article>
-          </div>
-        </section>
       </main>
     </div>
 
-    <script src="./app.js"></script>
+    <script src="./console.js"></script>
   </body>
 </html>

@@ -24,7 +24,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
-  font-family: "Noto Sans SC", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   background:
     radial-gradient(circle at top left, rgba(210, 168, 104, 0.18), transparent 28%),
     radial-gradient(circle at 82% 12%, rgba(127, 199, 185, 0.12), transparent 18%),
@@ -188,7 +188,10 @@ body::before {
 .section-text,
 .feature-card p:last-child,
 .roadmap-card p,
-.console-hint {
+.console-hint,
+.helper-copy,
+.warning-copy,
+.hero-note {
   color: var(--muted);
   line-height: 1.75;
 }
@@ -228,6 +231,24 @@ body::before {
   color: var(--text);
   border: 1px solid rgba(223, 189, 138, 0.22);
   background: rgba(255, 255, 255, 0.04);
+}
+
+.button-ghost {
+  color: var(--teal);
+  border: 1px solid rgba(127, 199, 185, 0.22);
+  background: rgba(127, 199, 185, 0.08);
+}
+
+.button-danger {
+  color: #ffe9e6;
+  border: 1px solid rgba(240, 125, 111, 0.28);
+  background: rgba(240, 125, 111, 0.12);
+}
+
+.button:disabled {
+  opacity: 0.64;
+  cursor: wait;
+  transform: none;
 }
 
 .hero-metrics {
@@ -277,6 +298,10 @@ body::before {
   gap: 14px;
   padding: 24px;
   border-radius: var(--radius-xl);
+}
+
+.hero-note {
+  margin: 0;
 }
 
 .coin-frame {
@@ -358,6 +383,11 @@ body::before {
   margin: 0;
 }
 
+.mono {
+  font-family: "Space Grotesk", sans-serif;
+  overflow-wrap: anywhere;
+}
+
 .endpoint-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
@@ -384,6 +414,154 @@ input[type="url"] {
 input[type="url"]:focus {
   border-color: rgba(255, 199, 118, 0.52);
   box-shadow: 0 0 0 4px rgba(255, 199, 118, 0.08);
+}
+
+.console-card {
+  padding: 22px;
+  border-radius: var(--radius-xl);
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.control-card,
+.activity-card {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.activity-card {
+  margin-top: 16px;
+}
+
+.control-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.file-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field-span {
+  grid-column: 1 / -1;
+}
+
+.field span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid rgba(223, 189, 138, 0.18);
+  border-radius: 14px;
+  outline: none;
+  color: var(--text);
+  font: inherit;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.field textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: rgba(255, 199, 118, 0.52);
+  box-shadow: 0 0 0 4px rgba(255, 199, 118, 0.08);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.detail-grid dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.detail-grid dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.warning-copy {
+  margin: 0;
+  color: #f3c983;
+}
+
+.activity-log {
+  display: grid;
+  gap: 12px;
+}
+
+.activity-item {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.activity-item p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.activity-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.activity-success {
+  border-color: rgba(127, 199, 185, 0.2);
+}
+
+.activity-warn {
+  border-color: rgba(243, 201, 131, 0.24);
+}
+
+.activity-error {
+  border-color: rgba(240, 125, 111, 0.24);
 }
 
 .stats-grid {
@@ -547,6 +725,9 @@ pre {
 
   .hero,
   .feature-grid,
+  .control-grid,
+  .form-grid,
+  .detail-grid,
   .stats-grid,
   .raw-grid,
   .tokenomics-shell,

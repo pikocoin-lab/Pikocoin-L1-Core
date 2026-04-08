@@ -166,7 +166,10 @@ What it includes:
 - Brand landing page using the checked-in Pikocoin icon
 - Genesis tokenomics view for the current 1,000,000,000 PIKO allocation plan
 - Founder claim walkthrough for `0x30514237625b9e4206c728ff551725b4bf9d4a85`
-- Lightweight console that can connect to a running node API
+- Browser-generated Lamport wallet flow stored in local storage and exportable as JSON
+- MetaMask founder-claim signing flow for the checked-in EVM treasury allocation
+- Client-side signed transfer submission through `/tx/submit`
+- Lightweight operator console that can mine or propose the next block from the active wallet
 
 Suggested Cloudflare Pages build settings for this repo:
 
@@ -175,3 +178,8 @@ Suggested Cloudflare Pages build settings for this repo:
 - Build output directory: `site`
 
 Because the frontend may live on a different domain than the Python node, the node now sends permissive CORS headers for `GET`, `POST`, and `OPTIONS`.
+
+Important browser caveat:
+
+- The production site is served over HTTPS, so browsers will block calls to an insecure `http://` node endpoint because of mixed-content rules.
+- For local development against `http://127.0.0.1:8080`, open the frontend locally or put the node behind an HTTPS endpoint such as `https://api.piko.eu.cc`.
