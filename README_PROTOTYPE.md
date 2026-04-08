@@ -183,3 +183,26 @@ Important browser caveat:
 
 - The production site is served over HTTPS, so browsers will block calls to an insecure `http://` node endpoint because of mixed-content rules.
 - For local development against `http://127.0.0.1:8080`, open the frontend locally or put the node behind an HTTPS endpoint such as `https://api.piko.eu.cc`.
+
+## Cloudflare Worker API
+
+This repository now also includes a Cloudflare Worker API implementation under [`workers/`](/D:/Pikocoin-L1-Core/workers/pikocoin-api-worker.mjs).
+
+What it provides:
+
+- Durable Object backed canonical chain state for the live browser console
+- HTTPS endpoints compatible with the current frontend:
+  - `GET /status`
+  - `GET /metadata`
+  - `GET /consensus/status`
+  - `GET /claims/status/:external_address`
+  - `GET /balance/:address`
+  - `POST /claims/message`
+  - `POST /claims/external/claim`
+  - `POST /tx/submit`
+  - `POST /mine`
+- Native Lamport transfer verification
+- EVM `personal_sign` founder-claim verification
+- Redirected `/icon` support using the checked-in project branding
+
+The frontend defaults to `https://api.piko.eu.cc` whenever it is opened outside `localhost`, so the public console can talk to the Worker-backed node without manual endpoint setup.

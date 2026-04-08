@@ -892,6 +892,8 @@ async function boot() {
     apiInputEl.value = savedBase;
   } else if (window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost") {
     apiInputEl.value = "http://127.0.0.1:8080";
+  } else {
+    apiInputEl.value = "https://api.piko.eu.cc";
   }
 
   await loadSnapshot();
