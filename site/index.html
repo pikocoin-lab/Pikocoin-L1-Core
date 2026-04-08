@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PIKO | Sovereign Chain</title>
+    <meta
+      name="description"
+      content="Pikocoin 主网前端门户与控制台，面向隐私、抗量子、可验证 AI 与高速支付。"
+    />
+    <meta property="og:title" content="PIKO | Sovereign Chain" />
+    <meta
+      property="og:description"
+      content="查看 Pikocoin 的代币分配、链元数据、验证者共识状态与创世认领流程。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./assets/pikocoin-icon.png" />
+    <link rel="icon" href="./assets/pikocoin-icon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="orb orb-left"></div>
+      <div class="orb orb-right"></div>
+
+      <header class="topbar">
+        <div class="brand-lockup">
+          <img class="brand-icon" src="./assets/pikocoin-icon.png" alt="Pikocoin" />
+          <div>
+            <p class="eyebrow">Pikocoin Sovereign Network</p>
+            <h1>PIKO 主网前端门户</h1>
+          </div>
+        </div>
+        <nav class="topnav">
+          <a href="#network">网络状态</a>
+          <a href="#tokenomics">代币分配</a>
+          <a href="#claim">认领流程</a>
+          <a href="https://github.com/pikocoin-lab/Pikocoin-L1-Core" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Privacy · AI · Post-Quantum · Fast Settlement</p>
+            <h2>把你的链原型，先变成真正能上线展示、能连节点、能讲清楚代币经济的入口页。</h2>
+            <p class="hero-text">
+              这个前端直接围绕你现在的 Pikocoin 原型链来做，展示创世分配、验证者 finality、外部
+              EVM 地址认领，以及未来面向隐私执行层与 AI 协处理网络的升级路线。
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#network">连接节点</a>
+              <a class="button button-secondary" href="#tokenomics">查看分配</a>
+            </div>
+            <div class="hero-metrics" id="hero-metrics"></div>
+          </div>
+
+          <div class="hero-panel">
+            <div class="coin-frame">
+              <img src="./assets/pikocoin-icon.png" alt="PIKO Coin" />
+            </div>
+            <div class="panel-card">
+              <p class="panel-label">主网定位</p>
+              <p class="panel-value">模块化主权链 + 隐私结算 + 可验证 AI + 抗量子迁移</p>
+            </div>
+            <div class="panel-card panel-card-compact">
+              <span>创世保留地址</span>
+              <button class="inline-link" id="copy-founder" type="button">复制</button>
+            </div>
+            <code class="address-pill" id="founder-address">0x30514237625b9e4206c728ff551725b4bf9d4a85</code>
+          </div>
+        </section>
+
+        <section class="feature-grid">
+          <article class="feature-card">
+            <p class="eyebrow">01</p>
+            <h3>去中心化安全层</h3>
+            <p>验证者轮换、链上投票、finalized 高度追踪已经接入，适合作为 testnet 起点。</p>
+          </article>
+          <article class="feature-card">
+            <p class="eyebrow">02</p>
+            <h3>外部地址认领</h3>
+            <p>创世里的 `0x...` 额度可通过 EVM personal-sign 认领到原生 `piko1...` 钱包。</p>
+          </article>
+          <article class="feature-card">
+            <p class="eyebrow">03</p>
+            <h3>抗量子迁移预留</h3>
+            <p>当前原型用 Lamport 风格签名验证路径，后续可平滑替换到正式 PQ 签名实现。</p>
+          </article>
+        </section>
+
+        <section class="section" id="network">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Live Console</p>
+              <h2>网络状态与节点控制台</h2>
+            </div>
+            <p class="section-text">
+              默认会读取静态创世快照。填入节点 API 后，可直接拉取 `/metadata`、`/status`、`/consensus/status`
+              和创始地址认领状态。
+            </p>
+          </div>
+
+          <div class="console-card">
+            <label class="input-label" for="api-base">节点 API 地址</label>
+            <div class="endpoint-row">
+              <input id="api-base" type="url" placeholder="例如 http://127.0.0.1:8080" />
+              <button class="button button-primary" id="connect-api" type="button">连接 API</button>
+              <button class="button button-secondary" id="load-snapshot" type="button">仅看静态快照</button>
+            </div>
+            <p class="console-hint" id="api-message">
+              当前展示的是仓库内静态数据。连接成功后，这里会切换成实时链状态。
+            </p>
+            <div class="stats-grid" id="network-stats"></div>
+            <div class="raw-grid">
+              <article class="raw-panel">
+                <div class="raw-panel-head">
+                  <h3>链元数据</h3>
+                  <span id="metadata-state">snapshot</span>
+                </div>
+                <pre id="metadata-json">{}</pre>
+              </article>
+              <article class="raw-panel">
+                <div class="raw-panel-head">
+                  <h3>共识状态</h3>
+                  <span id="consensus-state">snapshot</span>
+                </div>
+                <pre id="consensus-json">{}</pre>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tokenomics">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Tokenomics</p>
+              <h2>创世代币分配</h2>
+            </div>
+            <p class="section-text">
+              当前创世总量为 <span id="supply-inline">1,000,000,000</span> PIKO。你的地址已经预留创始人与治理国库额度。
+            </p>
+          </div>
+
+          <div class="tokenomics-shell">
+            <div class="allocation-bars" id="allocation-bars"></div>
+            <div class="allocation-list" id="allocation-list"></div>
+          </div>
+        </section>
+
+        <section class="section" id="claim">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Founder Claim</p>
+              <h2>创始地址认领路径</h2>
+            </div>
+            <p class="section-text">
+              这部分直接对应你已经写进链里的 `EVM_PERSONAL_CLAIM` 流程，用于把创世里的 `0x...` 额度转入 `piko1...` 地址。
+            </p>
+          </div>
+
+          <div class="claim-layout">
+            <ol class="step-list">
+              <li>创建或导入一个原生 `piko1...` 钱包作为接收地址。</li>
+              <li>向节点请求 claim message，让钱包拿到需签名的精确文本。</li>
+              <li>用 `0x3051...` 对应 EVM 钱包做 personal-sign。</li>
+              <li>把签名提交到链上，等待 proposer 出下一个块后完成认领。</li>
+            </ol>
+            <div class="claim-card">
+              <div class="claim-header">
+                <h3>Founder Claim Status</h3>
+                <span id="claim-status-tag">snapshot</span>
+              </div>
+              <dl class="claim-grid" id="claim-grid"></dl>
+            </div>
+          </div>
+        </section>
+
+        <section class="section roadmap">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Roadmap</p>
+              <h2>下一阶段直接对接主网能力</h2>
+            </div>
+          </div>
+          <div class="roadmap-grid">
+            <article class="roadmap-card">
+              <span>Phase 1</span>
+              <h3>前端 + GitHub + Cloudflare Pages</h3>
+              <p>把品牌门户、链状态展示、控制台入口挂到 `piko.eu.cc`。</p>
+            </article>
+            <article class="roadmap-card">
+              <span>Phase 2</span>
+              <h3>节点签名投票</h3>
+              <p>把当前占位式 validator 身份模式替换成真正可验证的 vote key。</p>
+            </article>
+            <article class="roadmap-card">
+              <span>Phase 3</span>
+              <h3>隐私层与支付层</h3>
+              <p>引入 UTXO + zk 证明支付通道，把“隐私”和“速度”从架构上同时补齐。</p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

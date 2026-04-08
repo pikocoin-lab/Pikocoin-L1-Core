@@ -1,0 +1,4 @@
+.tmp-tests/
+data/*.json
+__pycache__/
+*.pyc
